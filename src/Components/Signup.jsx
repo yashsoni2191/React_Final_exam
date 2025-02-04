@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -9,24 +10,21 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if user already exists in localStorage
-    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = existingUsers.find(user => user.email === formData.email);
-
-    if (userExists) {
-      alert("User already exists!");
-      return;
+    try {
+      const { data } = await axios.get(`http://localhost:3000/users?email=${formData.email}`);
+      if (data.length > 0) {
+        alert("User already exists!");
+        return;
+      }
+      await axios.post("http://localhost:3000/users", formData);
+      alert("Signup successful! Please login.");
+      navigate("/login");
+    } catch (error) {
+      console.error("Signup error:", error);
     }
-
-    // Save new user in localStorage
-    existingUsers.push(formData);
-    localStorage.setItem("users", JSON.stringify(existingUsers));
-
-    alert("Signup successful! Please login.");
-    navigate("/login");
   };
 
   return (
