@@ -1,0 +1,9 @@
+{
+    "products": [
+      { "id": 1, "title": "Product 1", "price": 100, "category": "Electronics", "image": "image_url" }
+    ],
+    "users": [
+      { "id": 1, "username": "admin", "password": "admin123" }
+    ]
+  }
+  
